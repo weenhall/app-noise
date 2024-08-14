@@ -1,0 +1,7 @@
+{
+  "name": "app-nosie",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
