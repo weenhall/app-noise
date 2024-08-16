@@ -37,8 +37,10 @@
       <ion-toolbar>
         <ion-title>
           <ion-button><ion-icon :icon="volumeMediumOutline" size="large" slot="icon-only"></ion-icon></ion-button>
-          <ion-button @click="togglePlayer"><ion-icon :icon="currentPlayIcon" size="large"
-              slot="icon-only"></ion-icon></ion-button>
+          <ion-button @click="togglePlayer"><ion-icon :icon="currentPlayIcon" size="large" slot="icon-only"></ion-icon></ion-button>
+          <audio  ref="audio">
+            <source src="/audio/birds.ogg" type="audio/ogg"/>
+          </audio>
         </ion-title>
       </ion-toolbar>
     </ion-footer>
@@ -49,6 +51,7 @@
 import { ref } from 'vue';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonFooter, IonIcon, IonButton, IonGrid, IonRow, IonCol,IonImg } from '@ionic/vue';
 import { volumeMediumOutline, playCircleOutline, stopCircleOutline } from 'ionicons/icons';
+const audio=ref();
 const playerIcons = [playCircleOutline, stopCircleOutline];
 const currentPlayIcon = ref(playerIcons[0]);
 // 切换播放图标
@@ -56,6 +59,12 @@ const togglePlayer = () => {
   const currentIndex = playerIcons.indexOf(currentPlayIcon.value);
   const nextIndex = (currentIndex + 1) % playerIcons.length;
   currentPlayIcon.value = playerIcons[nextIndex];
+  if(audio.value&&currentIndex===0){
+    audio.value.play();
+  }
+  if(audio.value&&currentIndex===1){
+    audio.value.pause();
+  }
 };
 </script>
 <style scoped>
