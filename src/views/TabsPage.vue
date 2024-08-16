@@ -14,7 +14,7 @@
         </ion-tab-button>
 
         <ion-tab-button tab="tab3" href="/tabs/tab3">
-          <ion-icon aria-hidden="true" :icon="square" />
+          <ion-icon aria-hidden="true" :icon="optionsOutline" />
           <ion-label>Tab 3</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
@@ -24,5 +24,5 @@
 
 <script setup lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
-import { speedometerOutline , square, radioOutline } from 'ionicons/icons';
+import { speedometerOutline , optionsOutline, radioOutline } from 'ionicons/icons';
 </script>
