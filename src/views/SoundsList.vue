@@ -8,8 +8,8 @@
     <ion-content :fullscreen="true">
       <ion-grid :fixed="true">
         <ion-row>
-          <ion-col size="3"><ion-img src="/img/emblems/rain-symbolic.svg"></ion-img>雨</ion-col>
-          <ion-col size="3"><ion-img src="/img/emblems/storm-symbolic.svg"></ion-img>咆哮</ion-col>
+          <ion-col size="3" name="rain" class="active"><ion-img src="/img/emblems/rain-symbolic.svg"></ion-img>雨</ion-col>
+          <ion-col size="3" name="storm"><ion-img src="/img/emblems/storm-symbolic.svg"></ion-img>咆哮</ion-col>
           <ion-col size="3"><ion-img src="/img/emblems/wind-symbolic.svg"></ion-img>风</ion-col>
           <ion-col size="3"><ion-img src="/img/emblems/waves-symbolic.svg"></ion-img>波浪</ion-col>
         </ion-row>
@@ -38,8 +38,8 @@
         <ion-title>
           <ion-button><ion-icon :icon="volumeMediumOutline" size="large" slot="icon-only"></ion-icon></ion-button>
           <ion-button @click="togglePlayer"><ion-icon :icon="currentPlayIcon" size="large" slot="icon-only"></ion-icon></ion-button>
-          <audio  ref="audio">
-            <source src="/audio/birds.ogg" type="audio/ogg"/>
+          <audio controls ref="audioPlayer">
+            <source :src="audioSrc"/>
           </audio>
         </ion-title>
       </ion-toolbar>
@@ -50,20 +50,23 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonFooter, IonIcon, IonButton, IonGrid, IonRow, IonCol,IonImg } from '@ionic/vue';
-import { volumeMediumOutline, playCircleOutline, stopCircleOutline } from 'ionicons/icons';
-const audio=ref();
-const playerIcons = [playCircleOutline, stopCircleOutline];
+import { volumeMediumOutline, playCircleOutline, pauseCircleOutline } from 'ionicons/icons';
+const audioPlayer=ref();
+const audioSrc=ref("/audio/birds.ogg");
+const playerIcons = [playCircleOutline, pauseCircleOutline];
 const currentPlayIcon = ref(playerIcons[0]);
 // 切换播放图标
 const togglePlayer = () => {
   const currentIndex = playerIcons.indexOf(currentPlayIcon.value);
   const nextIndex = (currentIndex + 1) % playerIcons.length;
   currentPlayIcon.value = playerIcons[nextIndex];
-  if(audio.value&&currentIndex===0){
-    audio.value.play();
+  if(audioPlayer.value&&currentIndex===0){
+    audioSrc.value="/audio/rain.ogg";
+    audioPlayer.value.load();
+    audioPlayer.value.play();
   }
-  if(audio.value&&currentIndex===1){
-    audio.value.pause();
+  if(audioPlayer.value&&currentIndex===1){
+    audioPlayer.value.pause();
   }
 };
 </script>
@@ -74,7 +77,7 @@ ion-title {
 ion-grid {
   text-align: center;
 }
-ion-col:hover{
+ion-col.active{
   background-color: darkgray;
 }
 </style>
