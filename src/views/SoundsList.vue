@@ -7,29 +7,12 @@
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-grid :fixed="true">
-        <ion-row>
-          <ion-col size="3" name="rain" class="active"><ion-img src="/img/emblems/rain-symbolic.svg"></ion-img>雨</ion-col>
-          <ion-col size="3" name="storm"><ion-img src="/img/emblems/storm-symbolic.svg"></ion-img>咆哮</ion-col>
-          <ion-col size="3"><ion-img src="/img/emblems/wind-symbolic.svg"></ion-img>风</ion-col>
-          <ion-col size="3"><ion-img src="/img/emblems/waves-symbolic.svg"></ion-img>波浪</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="3"><ion-img src="/img/emblems/stream-symbolic.svg"></ion-img>溪流</ion-col>
-          <ion-col size="3"><ion-img src="/img/emblems/birds-symbolic.svg"></ion-img>鸟</ion-col>
-          <ion-col size="3"><ion-img src="/img/emblems/summer-night-symbolic.svg"></ion-img>夏夜</ion-col>
-          <ion-col size="3"><ion-img src="/img/emblems/train-symbolic.svg"></ion-img>火车</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="3"><ion-img src="/img/emblems/boat-symbolic.svg"></ion-img>船</ion-col>
-          <ion-col size="3"><ion-img src="/img/emblems/city-symbolic.svg"></ion-img>城市</ion-col>
-          <ion-col size="3"><ion-img src="/img/emblems/coffee-shop-symbolic.svg"></ion-img>咖啡店</ion-col>
-          <ion-col size="3"><ion-img src="/img/emblems/fireplace-symbolic.svg"></ion-img>火炉</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="3"><ion-img src="/img/emblems/pink-noise-symbolic.svg"></ion-img>粉红噪声</ion-col>
-          <ion-col size="3"><ion-img src="/img/emblems/white-noise-symbolic.svg"></ion-img>白噪声</ion-col>
-          <!-- <ion-col size="3"></ion-col>
-          <ion-col size="3"></ion-col> -->
+        <ion-row v-for="(row, rowIndex) in getRows()" :key="rowIndex">
+          <ion-col v-for="(item, colIndex) in row" :key="colIndex" size="3" :class="{ active: item.active }"
+            @click="handleClick(item)">
+            <ion-img :src="item.imgSrc" :alt="item.name"></ion-img>
+            <div>{{ item.name }}</div>
+          </ion-col>
         </ion-row>
       </ion-grid>
     </ion-content>
@@ -37,9 +20,10 @@
       <ion-toolbar>
         <ion-title>
           <ion-button><ion-icon :icon="volumeMediumOutline" size="large" slot="icon-only"></ion-icon></ion-button>
-          <ion-button @click="togglePlayer"><ion-icon :icon="currentPlayIcon" size="large" slot="icon-only"></ion-icon></ion-button>
-          <audio controls ref="audioPlayer">
-            <source :src="audioSrc"/>
+          <ion-button @click="togglePlayer"><ion-icon :icon="currentPlayIcon" size="large"
+              slot="icon-only"></ion-icon></ion-button>
+          <audio ref="audioPlayer">
+            <source :src="audioSrc" />
           </audio>
         </ion-title>
       </ion-toolbar>
@@ -49,10 +33,88 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonFooter, IonIcon, IonButton, IonGrid, IonRow, IonCol,IonImg } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonFooter, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonImg } from '@ionic/vue';
 import { volumeMediumOutline, playCircleOutline, pauseCircleOutline } from 'ionicons/icons';
-const audioPlayer=ref();
-const audioSrc=ref("/audio/birds.ogg");
+const audioList = ref([{
+  name: '雨',
+  attrName: 'rain',
+  imgSrc: '/img/emblems/rain-symbolic.svg',
+  active: true
+}, {
+  name: '咆哮',
+  attrName: 'strom',
+  imgSrc: '/img/emblems/storm-symbolic.svg',
+  active: false
+}, {
+  name: '风',
+  attrName: 'wind',
+  imgSrc: '/img/emblems/wind-symbolic.svg',
+  active: false
+}, {
+  name: '波浪',
+  attrName: 'waves',
+  imgSrc: '/img/emblems/waves-symbolic.svg',
+  active: false
+}, {
+  name: '溪流',
+  attrName: 'stream',
+  imgSrc: '/img/emblems/stream-symbolic.svg',
+  active: false
+}, {
+  name: '鸟',
+  attrName: 'birds',
+  imgSrc: '/img/emblems/birds-symbolic.svg',
+  active: false
+}, {
+  name: '夏夜',
+  attrName: 'summer-night',
+  imgSrc: '/img/emblems/summer-night-symbolic.svg',
+  active: false
+}, {
+  name: '火车',
+  attrName: 'train',
+  imgSrc: '/img/emblems/train-symbolic.svg',
+  active: false
+}, {
+  name: '船',
+  attrName: 'boat',
+  imgSrc: '/img/emblems/boat-symbolic.svg',
+  active: false
+}, {
+  name: '城市',
+  attrName: 'city',
+  imgSrc: '/img/emblems/city-symbolic.svg',
+  active: false
+}, {
+  name: '咖啡店',
+  attrName: 'coffee-shop',
+  imgSrc: '/img/emblems/coffee-shop-symbolic.svg',
+  active: false
+}, {
+  name: '火炉',
+  attrName: 'fireplace',
+  imgSrc: '/img/emblems/fireplace-symbolic.svg',
+  active: false
+}, {
+  name: '粉红噪声',
+  attrName: 'pink-noise',
+  imgSrc: '/img/emblems/pink-noise-symbolic.svg',
+  active: false
+}, {
+  name: '白噪声',
+  attrName: 'white-noise',
+  imgSrc: '/img/emblems/white-noise-symbolic.svg',
+  active: false
+}])
+const getRows = () => {
+  const rows = [];
+  for (let i = 0; i < audioList.value.length; i += 4) {
+    rows.push(audioList.value.slice(i, i + 4));
+  }
+  return rows;
+}
+const audioPlayer = ref();
+const audioSrc = ref("/audio/birds.ogg");
 const playerIcons = [playCircleOutline, pauseCircleOutline];
 const currentPlayIcon = ref(playerIcons[0]);
 // 切换播放图标
@@ -60,24 +122,30 @@ const togglePlayer = () => {
   const currentIndex = playerIcons.indexOf(currentPlayIcon.value);
   const nextIndex = (currentIndex + 1) % playerIcons.length;
   currentPlayIcon.value = playerIcons[nextIndex];
-  if(audioPlayer.value&&currentIndex===0){
-    audioSrc.value="/audio/rain.ogg";
+  if (audioPlayer.value && currentIndex === 0) {
+    audioSrc.value = "/audio/rain.ogg";
     audioPlayer.value.load();
     audioPlayer.value.play();
   }
-  if(audioPlayer.value&&currentIndex===1){
+  if (audioPlayer.value && currentIndex === 1) {
     audioPlayer.value.pause();
   }
 };
+const handleClick = (item: any) => {
+  console.log(item)
+  item.active = true
+}
 </script>
 <style scoped>
 ion-title {
   text-align: center;
 }
+
 ion-grid {
   text-align: center;
 }
-ion-col.active{
+
+ion-col.active {
   background-color: darkgray;
 }
 </style>
