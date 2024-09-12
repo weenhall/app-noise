@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { ref,onMounted } from 'vue';
-import { IonPage, IonContent } from '@ionic/vue';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol,IonButton } from '@ionic/vue';
 import { GaugeChart } from '@toast-ui/chart';
 const startDisabled=ref(false);
 const stopDisabled=ref(true);

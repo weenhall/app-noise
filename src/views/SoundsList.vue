@@ -9,7 +9,7 @@
       <ion-grid :fixed="true">
         <ion-row v-for="(row, rowIndex) in getRows()" :key="rowIndex">
           <ion-col v-for="(item, colIndex) in row" :key="colIndex" size="3" :class="{ active: item.active }"
-            @click="handleClick(item)">
+            @click="handleClick(item, rowIndex, colIndex)">
             <ion-img :src="item.imgSrc" :alt="item.name"></ion-img>
             <div>{{ item.name }}</div>
           </ion-col>
@@ -35,6 +35,7 @@
 import { ref } from 'vue';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonFooter, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonImg } from '@ionic/vue';
 import { volumeMediumOutline, playCircleOutline, pauseCircleOutline } from 'ionicons/icons';
+import { onBeforeRouteLeave } from 'vue-router';
 const audioList = ref([{
   name: '雨',
   attrName: 'rain',
@@ -42,7 +43,7 @@ const audioList = ref([{
   active: true
 }, {
   name: '咆哮',
-  attrName: 'strom',
+  attrName: 'storm',
   imgSrc: '/img/emblems/storm-symbolic.svg',
   active: false
 }, {
@@ -114,7 +115,7 @@ const getRows = () => {
   return rows;
 }
 const audioPlayer = ref();
-const audioSrc = ref("/audio/birds.ogg");
+const audioSrc = ref("/audio/rain.ogg");
 const playerIcons = [playCircleOutline, pauseCircleOutline];
 const currentPlayIcon = ref(playerIcons[0]);
 // 切换播放图标
@@ -123,18 +124,33 @@ const togglePlayer = () => {
   const nextIndex = (currentIndex + 1) % playerIcons.length;
   currentPlayIcon.value = playerIcons[nextIndex];
   if (audioPlayer.value && currentIndex === 0) {
-    audioSrc.value = "/audio/rain.ogg";
-    audioPlayer.value.load();
     audioPlayer.value.play();
   }
   if (audioPlayer.value && currentIndex === 1) {
     audioPlayer.value.pause();
   }
 };
-const handleClick = (item: any) => {
-  console.log(item)
-  item.active = true
+let currentActiveIndex: number = 0;
+const handleClick = (item: any, rowIndex: number, colIndex: number) => {
+  audioList.value[currentActiveIndex].active = false;
+  currentActiveIndex = rowIndex * 4 + colIndex;
+  item.active = true;
+  audioPlayer.value.pause();
+  audioPlayer.value.currentTime = 0;
+  audioSrc.value = '/audio/' + item.attrName + '.ogg';
+  audioPlayer.value.load();
+  if (currentPlayIcon.value === pauseCircleOutline) {
+    audioPlayer.value.play();
+  }
 }
+
+onBeforeRouteLeave((to, from, next) => {
+  if(from.path==='/tabs/tab1'){
+    audioPlayer.value.pause();
+    currentPlayIcon.value =playCircleOutline;
+  }
+  next();
+});
 </script>
 <style scoped>
 ion-title {
