@@ -5,17 +5,17 @@
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="tab1" href="/tabs/tab1">
           <ion-icon aria-hidden="true" :icon="radioOutline" />
-          <ion-label>曲目</ion-label>
+          <ion-label>{{ $t('tab1') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="tab2" href="/tabs/tab2">
           <ion-icon aria-hidden="true" :icon="speedometerOutline" />
-          <ion-label>分贝检测</ion-label>
+          <ion-label>{{ $t('tab2') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="tab3" href="/tabs/tab3">
           <ion-icon aria-hidden="true" :icon="optionsOutline" />
-          <ion-label>设置</ion-label>
+          <ion-label>{{ $t('tab3') }}</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>

@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>声音列表</ion-title>
+        <ion-title>{{ $t('playlist') }}</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
@@ -11,7 +11,7 @@
           <ion-col v-for="(item, colIndex) in row" :key="colIndex" size="3" :class="{ active: item.active }"
             @click="handleClick(item, rowIndex, colIndex)">
             <ion-img :src="item.imgSrc" :alt="item.name"></ion-img>
-            <div>{{ item.name }}</div>
+            <div>{{ $t(toCamelCase(item.attrName), item.name) }}</div>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -145,12 +145,19 @@ const handleClick = (item: any, rowIndex: number, colIndex: number) => {
 }
 
 onBeforeRouteLeave((to, from, next) => {
-  if(from.path==='/tabs/tab1'){
+  if (from.path === '/tabs/tab1') {
     audioPlayer.value.pause();
-    currentPlayIcon.value =playCircleOutline;
+    currentPlayIcon.value = playCircleOutline;
   }
   next();
 });
+
+const toCamelCase = (str) => {
+  return str
+    .split('-')
+    .map((word, index) => index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1))
+    .join('');
+};
 </script>
 <style scoped>
 ion-title {
