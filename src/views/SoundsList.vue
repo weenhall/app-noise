@@ -19,7 +19,10 @@
     <ion-footer>
       <ion-toolbar>
         <ion-title>
-          <ion-button><ion-icon :icon="volumeMediumOutline" size="large" slot="icon-only"></ion-icon></ion-button>
+         <ion-range v-if="volumnRangeActive" aria-label="Range with pin" :pin="true" :pin-formatter="pinFormatter"
+            :min="0" :max="1" :step="0.01" :value="1" @ionChange="onVolumnChange"></ion-range>
+          <ion-button @click="toggleVolumn"><ion-icon :icon="volumeMediumOutline" size="large"
+              slot="icon-only"></ion-icon></ion-button>
           <ion-button @click="togglePlayer"><ion-icon :icon="currentPlayIcon" size="large"
               slot="icon-only"></ion-icon></ion-button>
           <audio ref="audioPlayer">
@@ -33,9 +36,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonFooter, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonImg } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonFooter, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonImg, IonRange } from '@ionic/vue';
 import { volumeMediumOutline, playCircleOutline, pauseCircleOutline } from 'ionicons/icons';
 import { onBeforeRouteLeave } from 'vue-router';
+const volumnRangeActive = ref(false);
 const audioList = ref([{
   name: '雨',
   attrName: 'rain',
@@ -130,6 +134,10 @@ const togglePlayer = () => {
     audioPlayer.value.pause();
   }
 };
+//切换声音调节
+const toggleVolumn = () => {
+  volumnRangeActive.value = !volumnRangeActive.value;
+}
 let currentActiveIndex: number = 0;
 const handleClick = (item: any, rowIndex: number, colIndex: number) => {
   audioList.value[currentActiveIndex].active = false;
@@ -152,22 +160,28 @@ onBeforeRouteLeave((to, from, next) => {
   next();
 });
 
-const toCamelCase = (str) => {
+const toCamelCase = (str: string) => {
   return str
     .split('-')
     .map((word, index) => index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1))
     .join('');
 };
+const pinFormatter = (value: number) => `${value * 100}%`;
+const onVolumnChange = ({ detail }: any) => {
+  audioPlayer.value.volume=detail.value;
+}
 </script>
 <style scoped>
+ion-range {
+  padding-left: 5%;
+  padding-right: 5%;
+}
 ion-title {
   text-align: center;
 }
-
 ion-grid {
   text-align: center;
 }
-
 ion-col.active {
   background-color: darkgray;
 }

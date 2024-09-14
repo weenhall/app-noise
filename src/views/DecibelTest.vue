@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { ref,onMounted } from 'vue';
-import { IonPage, IonContent, IonGrid, IonRow, IonCol,IonButton } from '@ionic/vue';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol,IonButton,alertController } from '@ionic/vue';
 import { GaugeChart } from '@toast-ui/chart';
 const startDisabled=ref(false);
 const stopDisabled=ref(true);
@@ -104,11 +104,19 @@ onMounted(() => {
 const startTest = () => {
   startDisabled.value=true;
   stopDisabled.value=false;
-  navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(mediaStream => {
+ navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(async mediaStream => {
       console.log('Microphone access successfully obtained');
       stream = mediaStream;
       audioContext = new AudioContext();
+      const alert = await alertController.create({
+      header: 'A Short Title Is Best',
+      subHeader: 'A Sub Header Is Optional',
+      message: audioContext,
+      buttons: ['Action'],
+    });
+
+    await alert.present();
       // 创建音频源节点
       const source = audioContext.createMediaStreamSource(stream);
       // 创建分析器节点
