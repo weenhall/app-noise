@@ -1,4 +1,6 @@
 # app
+## perview
+![Image text](https://github.com/weenhall/app-noise/blob/main/preview.png)
 ## deploying mobile
 * build
 ```
