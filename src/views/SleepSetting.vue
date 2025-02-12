@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <ion-item>
-        <ion-icon :icon="languageOutline" :size="large"></ion-icon>
+        <ion-icon :icon="languageOutline" size="large"></ion-icon>
         <ion-list>
           <ion-item>
             <ion-select :ok-text="$t('ok')" :cancel-text="$t('cancel')" v-model="currentLanguage" @ion-change="changeLanguage()">

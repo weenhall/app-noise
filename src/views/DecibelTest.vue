@@ -9,8 +9,10 @@
         </ion-row>
         <ion-row>
           <ion-col size="3"></ion-col>
-          <ion-col size="3"><ion-button color="success" @click="startTest" :disabled="startDisabled">start</ion-button></ion-col>
-          <ion-col size="3"><ion-button color="tertiary" @click="stopTest" :disabled="stopDisabled">stop</ion-button></ion-col>
+          <ion-col size="3"><ion-button color="success" @click="startTest"
+              :disabled="startDisabled">start</ion-button></ion-col>
+          <ion-col size="3"><ion-button color="tertiary" @click="stopTest"
+              :disabled="stopDisabled">stop</ion-button></ion-col>
           <ion-col size="3"></ion-col>
         </ion-row>
       </ion-grid>
@@ -19,11 +21,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref,onMounted } from 'vue';
-import { IonPage, IonContent, IonGrid, IonRow, IonCol,IonButton,alertController } from '@ionic/vue';
+import { ref, onMounted } from 'vue';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonButton, alertController } from '@ionic/vue';
 import { GaugeChart } from '@toast-ui/chart';
-const startDisabled=ref(false);
-const stopDisabled=ref(true);
+const startDisabled = ref(false);
+const stopDisabled = ref(true);
 const data = {
   series: [
     {
@@ -102,21 +104,13 @@ onMounted(() => {
   }
 })
 const startTest = () => {
-  startDisabled.value=true;
-  stopDisabled.value=false;
- navigator.mediaDevices.getUserMedia({ audio: true })
+  startDisabled.value = true;
+  stopDisabled.value = false;
+  navigator.mediaDevices.getUserMedia({ audio: true })
     .then(async mediaStream => {
       console.log('Microphone access successfully obtained');
       stream = mediaStream;
       audioContext = new AudioContext();
-      const alert = await alertController.create({
-      header: 'A Short Title Is Best',
-      subHeader: 'A Sub Header Is Optional',
-      message: audioContext,
-      buttons: ['Action'],
-    });
-
-    await alert.present();
       // 创建音频源节点
       const source = audioContext.createMediaStreamSource(stream);
       // 创建分析器节点
@@ -148,11 +142,20 @@ const startTest = () => {
       intervalId = setInterval(getVolume, 200);
     }).catch(error => {
       console.error('Error accessing microphone', error);
+      async () => {
+        const alert = await alertController.create({
+          header: 'A Short Title Is Best',
+          subHeader: 'A Sub Header Is Optional',
+          message: 'A message should be a short, complete sentence.',
+          buttons: ['Action'],
+        });
+        await alert.present();
+      };
     })
 }
 const stopTest = () => {
-  stopDisabled.value=true;
-  startDisabled.value=false;
+  stopDisabled.value = true;
+  startDisabled.value = false;
   clearInterval(intervalId);
   chart.setData({
     series: [

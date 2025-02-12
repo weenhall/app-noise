@@ -19,3 +19,8 @@ ionic cap copy
 ```
 ionic cap sync
 ```
+## generate android apk
+```
+cd android
+./gradlew assembleDebug
+```
